@@ -60,3 +60,25 @@ Pendant les pics de volatilité, on observe que :
 ## 5. Conclusion
 L'application de la Conformal Prediction au Risk Management permet de passer d'un modèle de "prédiction aveugle" à un système de **pilotage du risque dynamique**. Cette approche est particulièrement robuste pour les actifs volatils (Crypto-actifs, indices en période de crise) car elle s'auto-calibre en continu.
 
+## 6. Analyse Comparative : Pourquoi la CP ?
+
+Pour justifier le choix de la Conformal Prediction, nous l'avons comparée aux méthodes standards de l'industrie.
+
+### 6.1 CP vs Méthodes Bayésiennes
+* **Méthodes Bayésiennes** : Elles nécessitent de définir un "Prior" (une croyance a priori sur la distribution). Si le Prior est faux (ce qui arrive souvent lors d'un krach boursier), les intervalles de confiance sont totalement erronés.
+* **Conformal Prediction** : Elle est **"Distribution-Free"**. Elle ne suppose rien sur la forme des données. Sa validité est prouvée mathématiquement même si le modèle de base est médiocre.
+
+### 6.2 CP vs Quantile Regression
+La Quantile Regression tente d'estimer directement les quantiles (ex: VaR 95%). Cependant :
+1. Elle n'offre aucune garantie de couverture sur les données de test (out-of-sample).
+2. Elle est sujette à l' "Overfitting".
+**La CP**, en revanche, utilise un ensemble de calibration indépendant, ce qui garantit que le taux d'erreur sur les nouvelles données sera exactement de $\alpha$.
+
+## 7. Extension : Application au Portefeuille (CPPS)
+L'objectif "Excellent" mentionne le **CPPS (Conformal Predictive Portfolio Selection)**. 
+Dans ce cadre, la CP ne sert plus seulement à prédire un actif, mais à sélectionner les actifs dont l'incertitude est la plus faible. 
+
+**Logique d'implémentation :**
+1. Nous générons des intervalles CP pour $N$ actifs.
+2. Nous calculons le ratio Rendement/Incertitude (similaire au ratio de Sharpe, mais en remplaçant la Volatilité par la largeur de l'intervalle CP).
+3. On alloue plus de poids aux actifs ayant les intervalles les plus "fins" et stables. Cela permet une gestion de portefeuille beaucoup plus robuste en période de crise.
